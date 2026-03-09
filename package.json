@@ -14,22 +14,18 @@
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
 		"db:push": "drizzle-kit push",
-		"db:generate": "drizzle-kit generate",
-		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.2",
 		"@eslint/js": "^9.39.2",
-		"@libsql/client": "^0.17.0",
 		"@playwright/test": "^1.58.2",
 		"@sveltejs/adapter-auto": "^7.0.0",
 		"@sveltejs/kit": "^2.50.2",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@types/node": "^22",
 		"@vitest/browser-playwright": "^4.0.18",
-		"drizzle-kit": "^0.31.8",
-		"drizzle-orm": "^0.45.1",
+		"drizzle-kit": "^0.31.9",
 		"eslint": "^9.39.2",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.14.0",
@@ -43,7 +39,11 @@
 		"vitest-browser-svelte": "^2.0.2"
 	},
 	"dependencies": {
+		"@libsql/client": "^0.17.0",
+		"better-sqlite3": "^12.6.2",
+		"boostrap": "^2.0.0",
 		"bootstrap": "^5.3.8",
-		"bootstrap-icons": "^1.13.1"
+		"bootstrap-icons": "^1.13.1",
+		"drizzle-orm": "^0.45.1"
 	}
 }
