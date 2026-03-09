@@ -5,7 +5,11 @@
 	import { browser } from '$app/environment';
 	import 'bootstrap/dist/css/bootstrap.min.css'
 	import 'bootstrap-icons/font/bootstrap-icons.min.css';
-	onMount( async () => {
+	import { cartCount } from '$lib/stores/cart';
+  import { search } from "$lib/stores/search";
+  import { category } from "$lib/stores/categories";
+
+  onMount( async () => {
 		if (browser) {
 			// if running in the browser, load Bootstrap
 			console.log("Loading Bootstrap");
@@ -52,27 +56,27 @@
         <li class="nav-item">
           <a class="nav-link" href="/products">Shop</a>
         </li>
-		<li class="nav-item dropdown">
-		
-		<!-- Category dropdown menu -->	
-		<a
-			class="nav-link dropdown-toggle"
-			href=" #"
-			id="categoriesDropdown"
-			role="button"
-			data-bs-toggle="dropdown"
-			aria-expanded="false"
-		>
-			Categories
-		</a>
+    <li class="nav-item dropdown">
+    
+    <!-- Category dropdown menu -->	
+    <a
+      class="nav-link dropdown-toggle"
+      href=" #"
+      id="categoriesDropdown"
+      role="button"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+    >
+      Categories
+    </a>
 
-		<ul class="dropdown-menu">
-			<li><a class="dropdown-item" href="/categories/casual">Casual</a></li>
-			<li><a class="dropdown-item" href="/categories/formal">Formal</a></li>
-			<li><a class="dropdown-item" href="/categories/sporty">Sporty</a></li>
-			<li><a class="dropdown-item" href="/categories/home">Home</a></li>
-		</ul>
-		</li>
+    <ul class="dropdown-menu">
+      <li><button class="dropdown-item" onclick={() => category.set("Casual")}>Casual</button></li>
+      <li><button class="dropdown-item" onclick={() => category.set("Formal")}>Formal</button></li>
+      <li><button class="dropdown-item" onclick={() =>category.set("Sporty")}>Sporty</button></li>
+      <li><button class="dropdown-item" onclick={() =>category.set("")}>All</button></li>
+    </ul>
+    </li>
       </ul>
 
       <!-- Search Bar -->
@@ -80,11 +84,12 @@
         <input
           class="form-control me-2"
           type="search"
-          placeholder="Search products..."
+          placeholder="Search shoes..."
+          bind:value={$search}
         />
         <button class="btn btn-outline-light" type="submit" aria-label = "Search">
-			<i class="bi bi-search"></i>
-		</button>
+      <i class="bi bi-search"></i>
+    </button>
       </form>
 
       <!-- Right Icons -->
@@ -94,7 +99,7 @@
         <a href="/cart" class="text-white position-relative">
           <i class="bi bi-cart3 fs-5"></i>
           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            0
+            {$cartCount}
           </span>
         </a>
 
