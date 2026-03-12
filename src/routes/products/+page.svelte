@@ -1,12 +1,14 @@
 <script>
     export let data;
-    import { cartCount } from '$lib/stores/cart';
+    import { cartCount } from '$lib/stores/cartStore.js';
+    import { cart } from '$lib/stores/cartStore.js';
     import { search } from "$lib/stores/search";
     import { category } from "$lib/stores/categories";
 
-	function addToCart() {
-		cartCount.update(n => n + 1);
-	}
+
+    function addToCart(product) {
+	    cart.addItem(product);
+    }
 
     //reference to this code in document
     $: filteredProducts = data.products
@@ -39,7 +41,7 @@
                 <h4 class="product-title">{product.name}</h4>
                 <p class="product-desc">{product.description}</p>
                 <h5 class="product-price">${product.price}</h5>
-                <button class="cart" on:click={addToCart}>Add To Cart</button>
+                <button class="cart" on:click={() => addToCart(product)}>Add To Cart</button>
             </div>
         </div>
     {/each}
