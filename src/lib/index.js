@@ -1,1 +1,10 @@
-// place files you want to import through the `$lib` alias in this folder.
+import { drizzle } from 'drizzle-orm/libsql';
+import { createClient } from '@libsql/client';
+import * as schema from './schema.js';
+import { DATABASE_URL } from '$env/static/private';
+
+const client = createClient({
+    url: DATABASE_URL
+});
+
+export const db = drizzle(client, { schema });
