@@ -94,3 +94,32 @@ body{
     box-shadow: 0 4px 15px rgb(0,0,0,0.2);
     border-radius: 12px;
 }
+
+
+.cart-page{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 40px;
+}
+
+
+.cart-list{
+    list-style: none;
+    padding: 0;
+    width: 400px;
+}
+
+
+.cart-item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background-color: black;
+    color: white;
+
+    border-radius: 1.25rem;
+    padding: 15px;
+    margin-top: 15px;
+}

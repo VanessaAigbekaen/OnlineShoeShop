@@ -5,9 +5,10 @@
 	import { browser } from '$app/environment';
 	import 'bootstrap/dist/css/bootstrap.min.css'
 	import 'bootstrap-icons/font/bootstrap-icons.min.css';
-	import { cartCount } from '$lib/stores/cart';
+	import { cartCount } from '$lib/stores/cartStore';
   import { search } from "$lib/stores/search";
   import { category } from "$lib/stores/categories";
+  import { cart } from '$lib/stores/cartStore';
 
   onMount( async () => {
 		if (browser) {
@@ -73,9 +74,10 @@
     <ul class="dropdown-menu">
       <li><button class="dropdown-item" onclick={() => category.set("Casual")}>Casual</button></li>
       <li><button class="dropdown-item" onclick={() => category.set("Formal")}>Formal</button></li>
-      <li><button class="dropdown-item" onclick={() =>category.set("Sporty")}>Sporty</button></li>
-      <li><button class="dropdown-item" onclick={() =>category.set("")}>All</button></li>
+      <li><button class="dropdown-item" onclick={() => category.set("Sporty")}>Sporty</button></li>
+      <li><button class="dropdown-item" onclick={() => category.set("")}>All</button></li>
     </ul>
+    
     </li>
       </ul>
 
