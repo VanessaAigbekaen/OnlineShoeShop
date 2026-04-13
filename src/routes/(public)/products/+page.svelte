@@ -2,10 +2,9 @@
     import { enhance } from '$app/forms';
     import ProductForm from '$lib/components/ProductForm.svelte';
     import { slide, fade } from 'svelte/transition';
-    import { cart } from '$lib/stores/cartStore.js';
     import { search } from "$lib/stores/search";
     import { category } from "$lib/stores/categories";
-
+    import { invalidateAll } from '$app/navigation';
     export let data;
 
     // ── Cart ─
@@ -145,10 +144,12 @@
                                 <p class="product-desc">{product.description}</p>
                                 <h5 class="product-price">${product.price}</h5>
 
-                                <button class="cart" on:click={() => addToCart(product)}>
-                                    Add To Cart
-                                </button>
-
+                                <form method="post" action="?/addToCart" use:enhance={() => {return async () => {await invalidateAll();};}}>
+                                    <input type="hidden" name="productId" value={product.id} />
+                                    <button type="submit" class="cart">
+                                        Add To Cart
+                                    </button>
+                                </form>
                                 <!-- Edit / Delete -->
                                 {#if data.user?.role === 'admin'}
                                     <div class="mt-2 d-flex gap-1 justify-content-center">
