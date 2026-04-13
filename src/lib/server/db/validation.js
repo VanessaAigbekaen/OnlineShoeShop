@@ -3,17 +3,23 @@ import { z } from 'zod';
 // =========================
 // User Schemas
 // =========================
-export const insertUserSchema = z.object({
-    username: z.string().min(2, 'Username must be at least 2 characters'),
-    passwordHash: z.string().min(1, 'Password is required'),
-    firstname: z.string().min(1, 'First name is required'),
-    surname: z.string().min(1, 'Surname is required'),
+export const registerAuthSchema = z.object({
+    name: z.string().min(2, 'Name must be at least 2 characters'),
     email: z.string().email('Must be a valid email'),
-    dob: z.string().min(1, 'Date of birth is required'),
-    role: z.string().default('user')
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+    dob: z.string().nullable().optional()
 });
 
-export const updateUserSchema = insertUserSchema.partial();
+export const updateProfileSchema = z.object({
+    name: z.string().min(2).optional(),
+    dob: z.string().nullable().optional(),
+    role: z.string().optional(),
+    image: z.string().optional()
+});
+
+export const idSchema = z.object({
+    id: z.number().int().positive()
+});
 
 export const deleteUserSchema = z.object({
     id: z.number().int().positive()
