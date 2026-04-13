@@ -4,19 +4,25 @@ import { ZodError } from 'zod';
 
 
 // load - server side
-export async function load() {
+export async function load({ locals }) {
 
     try {
         
         // Get the data from the database through the service layer
         const prodCats = await categoriesService.getAllCategories();
         
+        let user = null;
+        if (locals.user) {
+            const { usersService } = await import('$lib/server/services/users-service.js');
+            user = await usersService.getById(Number(locals.user.id));
+        }
         // debugging purposes
         console.log('Product Categories:', prodCats);
 
         // return data
         return {
-            prodCategories: prodCats
+            prodCategories: prodCats,
+            user
         }
 
     } catch (err) {

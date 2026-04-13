@@ -91,11 +91,13 @@
     <h3>Categories</h3>
     <div class="row">
         <!-- left column-->
-        <div class="col-sm-2">
-            <button type="button" class="btn btn-success w-100" onclick={handleAddNew}>
-	            <i class="bi bi-plus-circle"></i> Add New Category
-            </button>
-        </div>
+        {#if data.user?.role === 'admin'}
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-success w-100" onclick={handleAddNew}>
+                    <i class="bi bi-plus-circle"></i> Add New Category
+                </button>
+            </div>
+        {/if}
 
         <!-- Right column -->
         <div class="col-sm-10">
@@ -134,24 +136,26 @@
                             <td><a href={`/category/${category.id}`}>{category.name}</a></td>
                             <td>{category.description}</td>
                             <td>
-                                <button
-                                    type="button"
-                                    class="btn btn-sm btn-outline-primary me-1"
-                                    aria-label="Update"
-                                    onclick={() => handleUpdate(category)}
-                                >
-                                    <i class="bi bi-pencil"></i>
-                                </button>
+                            {#if data.user?.role === 'admin'}
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-outline-primary me-1"
+                                        aria-label="Update"
+                                        onclick={() => handleUpdate(category)}
+                                    >
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
 
-                                <!-- NOTE: the button is type="button" so it does NOT submit here -->
-                                <button
-                                    type="button"
-                                    class="btn btn-sm btn-outline-danger"
-                                    aria-label="Delete"
-                                    onclick={() => openDeleteModal(category)}
-                                >
-                                    <i class="bi bi-trash"></i>
-                                </button>
+                                    <!-- NOTE: the button is type="button" so it does NOT submit here -->
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-outline-danger"
+                                        aria-label="Delete"
+                                        onclick={() => openDeleteModal(category)}
+                                    >
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                {/if}
                             </td>
                         </tr>
                     {/each}

@@ -18,7 +18,7 @@
 		}
 	})
 
-	let { children } = $props();
+	let { children, data } = $props();
 </script>
 
 <svelte:head>
@@ -59,26 +59,20 @@
         </li>
     <li class="nav-item dropdown">
     
-    <!-- Category dropdown menu -->	
-    <a
-      class="nav-link dropdown-toggle"
-      href=" #"
-      id="categoriesDropdown"
-      role="button"
-      data-bs-toggle="dropdown"
-      aria-expanded="false"
-    >
-      Categories
-    </a>
-
-    <ul class="dropdown-menu">
-      <li><button class="dropdown-item" onclick={() => category.set("Casual")}>Casual</button></li>
-      <li><button class="dropdown-item" onclick={() => category.set("Formal")}>Formal</button></li>
-      <li><button class="dropdown-item" onclick={() => category.set("Sporty")}>Sporty</button></li>
-      <li><button class="dropdown-item" onclick={() => category.set("")}>All</button></li>
-    </ul>
-    
     </li>
+    <!-- Admin only links -->
+				{#if data?.user?.role === 'admin'}
+					<li class="nav-item">
+						<a class="nav-link" href="/categories">
+							<i class="bi bi-grid me-1"></i>Manage Categories
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/orders">
+							<i class="bi bi-bag me-1"></i>Manage Orders
+						</a>
+					</li>
+				{/if}
       </ul>
 
       <!-- Search Bar -->
@@ -105,11 +99,36 @@
           </span>
         </a>
 
-        <!-- User -->
-        <a href="/user" class="text-white position-relative" aria-label = "Shopping Cart">
-          <i class="bi bi-person-circle fs-5"></i>
-        </a>
-
+        <!-- User menu-->
+        {#if data?.user}
+					<div class="dropdown">
+						<button
+							class="btn btn-outline-light btn-sm dropdown-toggle"
+							type="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						>
+							<i class="bi bi-person-circle me-1"></i>{data.user.name}
+						</button>
+						<ul class="dropdown-menu dropdown-menu-end">
+							<li>
+								<a class="dropdown-item" href="/account">
+									<i class="bi bi-person me-2"></i>My Account
+								</a>
+							</li>
+							<li><hr class="dropdown-divider" /></li>
+							<li>
+								<a class="dropdown-item text-danger" href="/auth/logout">
+									<i class="bi bi-box-arrow-right me-2"></i>Logout
+								</a>
+							</li>
+						</ul>
+					</div>
+				{:else}
+					<a href="/auth/login" class="btn btn-outline-light btn-sm">
+						<i class="bi bi-box-arrow-in-right me-1"></i> Login
+					</a>
+				{/if}
       </div>
     </div>
   </div>
