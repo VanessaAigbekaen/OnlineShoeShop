@@ -21,7 +21,6 @@ export const product = sqliteTable('product', {
 	price: integer().notNull(),
 	image: text(),
 	quantity: integer().notNull().default(0),
-	category: text().notNull(),
 	categoryId: integer().references(() => productCategory.id)
 });
 
