@@ -25,6 +25,13 @@ export const deleteUserSchema = z.object({
     id: z.number().int().positive()
 });
 
+export const updateUserSchema = z.object({
+	name: z.string().min(1),
+	email: z.string().email(),
+	dob: z.string().optional(),
+	role: z.string().optional()
+});
+
 // =========================
 // Product Category Schemas
 // =========================
@@ -48,7 +55,7 @@ export const insertProductSchema = z.object({
     price: z.number().int().min(1, 'Price must be at least 1 cent'),
     image: z.string().optional(),
     quantity: z.number().int().min(0, 'Quantity cannot be negative'),
-    categoryId: z.number().int().min(1, 'Category is required')
+    categoryId: z.number().nullable().optional()
 });
 
 export const updateProductSchema = insertProductSchema.partial();
