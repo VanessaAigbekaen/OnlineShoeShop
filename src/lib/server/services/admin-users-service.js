@@ -3,6 +3,8 @@ import { auth } from '$lib/server/auth';
 import { usersDataAccess } from '$lib/server/data-access/users-data-access.js';
 import { idSchema, adminInsertUserSchema, updateUserSchema } from '$lib/server/db/validation.js';
 import { z } from 'zod';
+import { eq } from 'drizzle-orm';
+import { user } from '../db/auth.schema';
 
 /**
  * Local password schema for admin reset/create
@@ -138,7 +140,7 @@ export const adminUsersService = {
 
 		const validated = idSchema.parse({ id });
 
-		await db.delete(users).where(eq(users.id, validated.id));
+		await db.delete(user).where(eq(user.id, validated.id));
 
 		return true;
 	},
@@ -155,12 +157,8 @@ export const adminUsersService = {
 			password: payload.password
 		});
 
-		await auth.api.setUserPassword({
-			body: {
-				userId: validatedId.id,
-				newPassword: validatedPassword.password
-			},
-			headers
+		await usersDataAccess.update(validatedId.id, {
+			password: validatedPassword.password
 		});
 
 		return true;

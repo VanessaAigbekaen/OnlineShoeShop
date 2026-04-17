@@ -25,6 +25,13 @@ export const deleteUserSchema = z.object({
     id: z.number().int().positive()
 });
 
+export const updateUserSchema = z.object({
+	name: z.string().min(1),
+	email: z.string().email(),
+	dob: z.string().optional(),
+	role: z.string().optional()
+});
+
 // =========================
 // Product Category Schemas
 // =========================
