@@ -5,10 +5,8 @@
 	import { browser } from '$app/environment';
 	import 'bootstrap/dist/css/bootstrap.min.css'
 	import 'bootstrap-icons/font/bootstrap-icons.min.css';
-	import { cartCount } from '$lib/stores/cartStore';
-  import { search } from "$lib/stores/search";
+	import { search } from "$lib/stores/search";
   import { category } from "$lib/stores/categories";
-  import { cart } from '$lib/stores/cartStore';
 
   onMount( async () => {
 		if (browser) {
@@ -95,7 +93,7 @@
         <a href="/cart" class="text-white position-relative">
           <i class="bi bi-cart3 fs-5"></i>
           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {$cartCount}
+            {data.cartCount ?? 0}
           </span>
         </a>
 
