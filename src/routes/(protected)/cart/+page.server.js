@@ -1,6 +1,8 @@
 import { cartService } from '$lib/server/services/cart-service.js';
-import { ordersService } from '$lib/server/services/orders-service.js';
 import { redirect, error } from '@sveltejs/kit';
+import { stripe } from '$lib/server/stripe.js';
+import { ORIGIN } from '$env/static/private';
+import { ordersService } from '$lib/server/services/orders-service.js';
 
 export async function load({ locals }) {
   if (!locals.user) throw error(401, 'Not authenticated');
@@ -50,12 +52,38 @@ export const actions = {
     },
 
     checkout: async ({ locals }) => {
+        if (!locals.user) throw error(401, 'Not authenticated');
 
-        if (!locals.user) throw error(401);
+        // 1️ Get user's cart and items
+        const cart = await cartService.getOrCreateCart(locals.user.id);
+        const items = await cartService.getItems(cart.id);
 
+        if (!items.length) throw error(400, 'Cart is empty');
+
+        // 2️ Create order BEFORE Stripe
         const order = await ordersService.createOrderFromCart(locals.user);
+        
+        // 3️ Create Stripe Checkout session
+        const session = await stripe.checkout.sessions.create({
+        mode: 'payment',                     // one-time payment
+        payment_method_types: ['card'],      // allow card payments
+        customer_email: locals.user.email,   // optional, prefill Stripe checkout
+        metadata: {
+            orderId: order.id.toString()    // <-- link Stripe session to order
+        },
+        line_items: items.map(item => ({
+            price_data: {
+                currency: 'eur',
+                product_data: { name: item.name },
+                unit_amount: Math.round(item.unitPrice * 100)     // price in cents
+            },
+            quantity: item.quantity
+        })),
+            success_url: `${ORIGIN}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${ORIGIN}/cart`
+        });
 
-        // SvelteKit uses exceptions internally to stop execution and send a redirect response.
-        throw redirect(303, `/orders/${order.id}/confirmation`);
+        // 4️ Redirect user to Stripe-hosted checkout page
+        throw redirect(303, session.url);
     }
 };

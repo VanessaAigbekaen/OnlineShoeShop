@@ -11,15 +11,19 @@ export async function load({ params, locals }) {
     throw error(400, 'Invalid order');
   }
 
-  if (!Number.isInteger(userId) || userId < 1) {
-    throw error(401, 'Invalid user');
-  }
-
   const order = await ordersDataAccess.findById(orderId);
+  console.log("ORDER:", order);
+  console.log("USER ID:", userId);
+  console.log("PARAM ID:", params.id);
 
-  if (!order || order.userId !== userId) {
+  if (!order) {
     throw error(404, 'Order not found');
   }
+
+  if (Number(order.userId) !== userId) {
+    throw error(403, 'Access denied');
+  }
+  
   const items = await ordersDataAccess.findDetailsWithProductsByOrderId(orderId);
   return { order,items };
 }

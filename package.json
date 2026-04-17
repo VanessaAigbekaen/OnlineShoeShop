@@ -43,6 +43,7 @@
 	},
 	"dependencies": {
 		"@libsql/client": "^0.17.0",
+		"@stripe/stripe-js": "^9.2.0",
 		"better-sqlite3": "^12.6.2",
 		"boostrap": "^2.0.0",
 		"bootstrap": "^5.3.8",
@@ -50,6 +51,7 @@
 		"drizzle-orm": "^0.45.1",
 		"drizzle-zod": "^0.8.3",
 		"resend": "^6.10.0",
+		"stripe": "^22.0.2",
 		"zod": "^4.3.6"
 	}
 }

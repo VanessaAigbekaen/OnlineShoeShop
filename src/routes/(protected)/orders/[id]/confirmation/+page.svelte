@@ -15,16 +15,16 @@
 </p>
 
 <p>
-  <strong>Total:</strong> {euro.format(order.total / 100)}<br />
+  <strong>Total:</strong> {euro.format(order.total)}<br />
   <strong>Date:</strong> {new Date(order.createdAt).toLocaleString()}
 </p>
 <hr />
 <h4>Items</h4>
 <ul class="list-group mb-4">
-  {#each order.items as item}
+  {#each data.items as item}
     <li class="list-group-item d-flex justify-content-between">
       <div>
-        <strong>{item.productId}</strong><br />
+        <strong>{item.productName}</strong><br />
         Qty: {item.quantity}
       </div>
       <div>
