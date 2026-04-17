@@ -25,9 +25,10 @@
                         <dd class="col-8">{new Date(data.user.createdAt).toLocaleDateString()}</dd>
                     </dl>
 
-                    <a href="/auth/logout" class="btn btn-dark w-100 mt-3">
-                        <i class="bi bi-box-arrow-right me-1"></i> Logout
-                    </a>
+                <form method="POST" action="/auth/logout">
+                  <button type="submit" class="dropdown-item">
+                    Logout
+                  </button>
 
                 </div>
             </div>

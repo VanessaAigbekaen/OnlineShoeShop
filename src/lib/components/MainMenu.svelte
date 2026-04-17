@@ -1,16 +1,16 @@
 <script>
+
+    import { ROLES } from "$lib/constants/roles";
 	import favicon from '$lib/assets/favicon.svg';
 	import { onMount } from 'svelte';
 	// Browser used to test if client or server side
 	import { browser } from '$app/environment';
 	import 'bootstrap/dist/css/bootstrap.min.css'
 	import 'bootstrap-icons/font/bootstrap-icons.min.css';
-	import { search } from "$lib/stores/search";
+	import { cartCount } from '$lib/stores/cartStore';
+  import { search } from "$lib/stores/search";
   import { category } from "$lib/stores/categories";
   import { cart } from '$lib/stores/cartStore';
-  import { ROLES } from "$lib/constants/roles";
-	import AdminMenu from '$lib/components/AdminMenu.svelte';
-	import MainMenu from '$lib/components/MainMenu.svelte';
 
   onMount( async () => {
 		if (browser) {
@@ -27,12 +27,14 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<!-- Render menu based on role -->
-{#if data.user && (data.user.role === ROLES.ADMIN)}
-  <AdminMenu {data} />
-{:else}
-  <MainMenu { data } />
-{/if}
+<!-- Header with Navbar -->
+<header class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container">
+
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+      <i class="bi bi-shop-window me-2"></i>Leon's Shoe Shop
+    </a>
 
     <!-- Mobile Toggle -->
     <button
@@ -96,7 +98,7 @@
         <a href="/cart" class="text-white position-relative">
           <i class="bi bi-cart3 fs-5"></i>
           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {data.cartCount ?? 0}
+            {$cartCount}
           </span>
         </a>
 
@@ -119,9 +121,11 @@
 							</li>
 							<li><hr class="dropdown-divider" /></li>
 							<li>
-								<a class="dropdown-item text-danger" href="/auth/logout">
-									<i class="bi bi-box-arrow-right me-2"></i>Logout
-								</a>
+								<form method="POST" action="/auth/logout">
+                  <button type="submit" class="dropdown-item">
+                    Logout
+                  </button>
+                </form>
 							</li>
 						</ul>
 					</div>
@@ -134,7 +138,3 @@
     </div>
   </div>
 </header>
-{@render children()}
-<div class="container-xl bd-gutter my-md-4 bd-layout">
-  {@render children()}
-</div>

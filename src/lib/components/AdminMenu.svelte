@@ -1,16 +1,16 @@
 <script>
+
+    import { ROLES } from "$lib/constants/roles";
 	import favicon from '$lib/assets/favicon.svg';
 	import { onMount } from 'svelte';
 	// Browser used to test if client or server side
 	import { browser } from '$app/environment';
 	import 'bootstrap/dist/css/bootstrap.min.css'
 	import 'bootstrap-icons/font/bootstrap-icons.min.css';
-	import { search } from "$lib/stores/search";
+    import { cartCount } from '$lib/stores/cartStore';
+  import { search } from "$lib/stores/search";
   import { category } from "$lib/stores/categories";
   import { cart } from '$lib/stores/cartStore';
-  import { ROLES } from "$lib/constants/roles";
-	import AdminMenu from '$lib/components/AdminMenu.svelte';
-	import MainMenu from '$lib/components/MainMenu.svelte';
 
   onMount( async () => {
 		if (browser) {
@@ -27,12 +27,14 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<!-- Render menu based on role -->
-{#if data.user && (data.user.role === ROLES.ADMIN)}
-  <AdminMenu {data} />
-{:else}
-  <MainMenu { data } />
-{/if}
+<!-- Header with Navbar -->
+<header class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container">
+
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="/AdminHomePanel">
+      <i class="bi bi-shop-window me-2"></i>Leon's Shoe Shop - Admin Panel
+    </a>
 
     <!-- Mobile Toggle -->
     <button
@@ -53,10 +55,7 @@
       <!-- Left Links -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/products">Shop</a>
+          <a class="nav-link" href="/admin">Home</a>
         </li>
     <li class="nav-item dropdown">
     
@@ -64,15 +63,26 @@
     <!-- Admin only links -->
 				{#if data?.user?.role === 'admin'}
 					<li class="nav-item">
-						<a class="nav-link" href="/categories">
+						<a class="nav-link" href="/admin/categories">
 							<i class="bi bi-grid me-1"></i>Manage Categories
 						</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="/orders">
+						<a class="nav-link" href="/admin/orders">
 							<i class="bi bi-bag me-1"></i>Manage Orders
 						</a>
 					</li>
+                    <li class="nav-item">
+						<a class="nav-link" href="/admin/products">
+							<i class="bi bi-bag me-1"></i>Manage Products
+						</a>
+					</li>
+                    <li class="nav-item">
+						<a class="nav-link" href="/admin/users">
+							<i class="bi bi-bag me-1"></i>Manage users
+						</a>
+					</li>
+    
 				{/if}
       </ul>
 
@@ -96,7 +106,7 @@
         <a href="/cart" class="text-white position-relative">
           <i class="bi bi-cart3 fs-5"></i>
           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {data.cartCount ?? 0}
+            {$cartCount}
           </span>
         </a>
 
@@ -113,15 +123,17 @@
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end">
 							<li>
-								<a class="dropdown-item" href="/account">
+								<a class="dropdown-item" href="/admin/account">
 									<i class="bi bi-person me-2"></i>My Account
 								</a>
 							</li>
 							<li><hr class="dropdown-divider" /></li>
 							<li>
-								<a class="dropdown-item text-danger" href="/auth/logout">
-									<i class="bi bi-box-arrow-right me-2"></i>Logout
-								</a>
+								<form method="POST" action="/auth/logout">
+                  <button type="submit" class="dropdown-item">
+                    Logout
+                  </button>
+                </form>
 							</li>
 						</ul>
 					</div>
@@ -134,7 +146,3 @@
     </div>
   </div>
 </header>
-{@render children()}
-<div class="container-xl bd-gutter my-md-4 bd-layout">
-  {@render children()}
-</div>
