@@ -1,12 +1,9 @@
 <script>
     export let data;
-    import { cart } from '$lib/stores/cartStore.js';
     import { search } from "$lib/stores/search";
     import { category } from "$lib/stores/categories";
-
-    function addToCart(product) {
-	    cart.addItem(product);
-    }
+    import { enhance } from '$app/forms';
+    import { invalidateAll } from '$app/navigation';
 
     //reference to this code in document
     $: filteredProducts = data.products
@@ -50,7 +47,10 @@
                 <h4 class="product-title">{product.name}</h4>
                 <p class="product-desc">{product.description}</p>
                 <h5 class="product-price">${product.price}</h5>
-                <button class="cart" on:click={() => addToCart(product)}>Add To Cart</button>
+                <form method="post" action="?/addToCart"  use:enhance={() => {return async () => { await invalidateAll();}; }}>
+                    <input type="hidden" name="productId" value={product.id} />
+                    <button type="submit" class="cart">Add To Cart</button>
+                </form>
             </div>
         </div>
     </div>
@@ -73,7 +73,11 @@
                 <h4 class="product-title">{product.name}</h4>
                 <p class="product-desc">{product.description}</p>
                 <h5 class="product-price">${product.price}</h5>
-                <button class="cart" on:click={addToCart}>Add To Cart</button>
+                
+                <form method="post" action="?/addToCart"  use:enhance={() => {return async () => { await invalidateAll();}; }}>
+                    <input type="hidden" name="productId" value={product.id} />
+                    <button type="submit" class="cart">Add To Cart</button>
+                </form>
             </div>
         </div>
     {/each}
