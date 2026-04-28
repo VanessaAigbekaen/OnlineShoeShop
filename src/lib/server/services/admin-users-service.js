@@ -5,7 +5,7 @@ import { idSchema, adminInsertUserSchema, updateUserSchema } from '$lib/server/d
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { user, session, account } from '../db/auth.schema';
-import { cart, cartItem, order, orderDetail, review, productInteraction } from '../db/schema.js';
+import { cart, cartItem, order, orderDetail, review, productInteraction, productReview } from '../db/schema.js';
 import { validateAuthorizationCode } from 'better-auth';
 import { error } from '@sveltejs/kit'
 import { idSchema, adminInsertUserSchema, updateUserSchema } from '$lib/server/db/validation.js';
@@ -173,7 +173,7 @@ export const adminUsersService = {
 
     	await db.delete(cart).where(eq(cart.userId, userId));
    		await db.delete(order).where(eq(order.userId, userId));
-    	await db.delete(review).where(eq(review.userId, userId));
+    	await db.delete(productReview).where(eq(productReview.userId, userId));
     	await db.delete(productInteraction).where(eq(productInteraction.userId, userId));
     	await db.delete(session).where(eq(session.userId, userId));
     	await db.delete(account).where(eq(account.userId, userId));
