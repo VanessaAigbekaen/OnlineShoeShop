@@ -33,4 +33,4 @@
     </li>
   {/each}
 </ul>
-<a href="/orders" class="btn btn-primary">View all orders</a>
+<a href={`/orders/${order.id}/confirmation`} class="btn btn-primary">View all orders</a>

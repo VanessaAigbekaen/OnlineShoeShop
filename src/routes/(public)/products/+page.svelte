@@ -142,13 +142,13 @@
                                     <a href={`/products/${product.id}`}>{product.name}</a>
                                 </h4>
                                 <p class="product-desc">{product.description}</p>
-                                <h5 class="product-price">${product.price}</h5>
+                                <h5 class="product-price">€{product.price}</h5>
 
                                 <form method="post" action="?/addToCart" use:enhance={() => {return async () => {await invalidateAll();};}}>
                                     <input type="hidden" name="productId" value={product.id} />
-                                    <button type="submit" class="cart">
-                                        Add To Cart
-                                    </button>
+                                    {#if data.user?.role !== 'admin'}
+                                      <button class="cart" on:click={() => addToCart(product)}> Add To Cart</button>
+                                    {/if}
                                 </form>
                                 <!-- Edit / Delete -->
                                 {#if data.user?.role === 'admin'}

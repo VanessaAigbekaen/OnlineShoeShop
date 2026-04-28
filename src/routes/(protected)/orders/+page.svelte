@@ -46,7 +46,7 @@
 
               <!-- Action -->
               <div class="mt-auto">
-                <a href={`/orders/${order.id}`} class="btn btn-outline-dark w-100">
+                <a href={`/orders/${order.id}/confirmation`} class="btn btn-outline-dark w-100">
                   View Details
                 </a>
               </div>
