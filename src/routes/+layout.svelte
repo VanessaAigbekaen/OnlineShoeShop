@@ -7,6 +7,10 @@
 	import 'bootstrap-icons/font/bootstrap-icons.min.css';
 	import { search } from "$lib/stores/search";
   import { category } from "$lib/stores/categories";
+  import { cart } from '$lib/stores/cartStore';
+  import { ROLES } from "$lib/constants/roles";
+	import AdminMenu from '$lib/components/AdminMenu.svelte';
+	import MainMenu from '$lib/components/MainMenu.svelte';
 
   onMount( async () => {
 		if (browser) {
@@ -22,14 +26,13 @@
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
-<!-- Header with Navbar -->
-<header class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-  <div class="container">
 
-    <!-- Logo -->
-    <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
-      <i class="bi bi-shop-window me-2"></i>Leon's Shoe Shop
-    </a>
+<!-- Render menu based on role -->
+{#if data.user && (data.user.role === ROLES.ADMIN)}
+  <AdminMenu {data} />
+{:else}
+  <MainMenu { data } />
+{/if}
 
     <!-- Mobile Toggle -->
     <button
@@ -129,6 +132,6 @@
 				{/if}
       </div>
     </div>
-  </div>
-</header>
-{@render children()}
+<div class="container-xl bd-gutter my-md-4 bd-layout">
+  {@render children()}
+</div>

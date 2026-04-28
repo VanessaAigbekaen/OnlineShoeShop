@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { user, productCategory, product, productReview, order, orderDetail } from './schema';
+import { createSelectSchema, createInsertSchema } from 'drizzle-zod';
 
 // =========================
 // User Schemas
@@ -25,6 +27,13 @@ export const deleteUserSchema = z.object({
     id: z.number().int().positive()
 });
 
+export const updateUserSchema = z.object({
+	name: z.string().min(1),
+	email: z.string().email(),
+	dob: z.string().optional(),
+	role: z.string().optional()
+});
+
 // =========================
 // Product Category Schemas
 // =========================
@@ -48,7 +57,7 @@ export const insertProductSchema = z.object({
     price: z.number().int().min(1, 'Price must be at least 1 cent'),
     image: z.string().optional(),
     quantity: z.number().int().min(0, 'Quantity cannot be negative'),
-    categoryId: z.number().int().min(1, 'Category is required')
+    categoryId: z.number().nullable().optional()
 });
 
 export const updateProductSchema = insertProductSchema.partial();
@@ -85,5 +94,41 @@ export const insertOrderDetailSchema = z.object({
 export const updateOrderDetailSchema = insertOrderDetailSchema.partial();
 
 export const deleteOrderDetailSchema = z.object({
+    id: z.number().int().positive()
+});
+
+// =========================
+// Admin Schemas
+// =========================
+
+export const adminInsertUserSchema = z.object({
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    email: z.string().email('Must be a valid email'),
+    dob: z.string().nullable().optional(),
+    role: z.string().optional()
+});
+
+/** =========================
+ * Product Review Schemas
+ * ========================= */
+export const selectProductReviewSchema = createSelectSchema(productReview);
+
+export const insertProductReviewSchema = createInsertSchema(productReview, {
+  productId: z.number().int().min(1, 'Product ID is required'),
+  userId: z.number().int().min(1, 'User ID is required'),
+  rating: z.number().int().min(1, 'Rating must be at least 1').max(5, 'Rating cannot exceed 5'),
+  comment: z.string().max(1000, 'Comment must be 1000 characters or less').nullable().optional()
+});
+
+export const updateProductReviewSchema = insertProductReviewSchema
+  .partial()
+  .omit({
+    id: true,
+    productId: true,
+    userId: true,
+    createdAt: true
+  });
+
+export const deleteProductReviewSchema = z.object({
     id: z.number().int().positive()
 });

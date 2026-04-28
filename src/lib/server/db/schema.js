@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
 import { sql, relations } from 'drizzle-orm';
 import { user } from './auth.schema.js';
 
@@ -21,7 +21,6 @@ export const product = sqliteTable('product', {
 	price: integer().notNull(),
 	image: text(),
 	quantity: integer().notNull().default(0),
-	category: text().notNull(),
 	categoryId: integer().references(() => productCategory.id)
 });
 
@@ -67,16 +66,36 @@ export const cartItem = sqliteTable('cart_item', {
 });
 
 /** =========================
- * Product Review Table
+ * Product Review Table - 1 review per product for each user
  * ========================= */
-export const review = sqliteTable('review', {
+export const productReview = sqliteTable('product_review', {
 	id: integer().primaryKey({ autoIncrement: true }),
 	productId: integer().notNull().references(() => product.id),
 	userId: integer().notNull().references(() => user.id),
-	rating: integer().notNull(),
+	rating: integer().notNull(), //1 to 5
 	comment: text(),
-	createdAt: integer({ mode: 'timestamp_ms' }).notNull().default(sql`CURRENT_TIMESTAMP`)
-});
+	createdAt: integer({ mode: 'timestamp_ms'}).notNull().default(sql`CURRENT_TIMESTAMP`)
+	},
+	(table) => ({
+		userProductUnique: uniqueIndex('product_review_user_product_idx').on(
+			table.userId,
+			table.productId
+		)
+	})
+);
+
+//Product Review --> Product, User
+export const productReviewRelations = relations(productReview, ({ one }) =>
+({
+	product: one(product, {
+		fields: [productReview.productId],
+		references: [product.id]
+	}),
+	user: one(user, {
+		fields: [productReview.userId],
+		references: [user.id]
+	})
+}))
 
 /** =========================
  * User Product Interaction
@@ -92,7 +111,12 @@ export const productInteraction = sqliteTable('product_interaction', {
 /** =========================
  * Relations
  * ========================= */
-export const userRelations = relations(user, ({ many }) => ({ orders: many(order) }));
+
+// User -> Orders (1:M), Reviews (1:M)
+export const userRelations = relations(user, ({ many }) => ({ 
+	orders: many(order),
+	reviews: many(productReview)
+}));
 
 export const productCategoryRelations = relations(productCategory, ({ many }) => ({
 	products: many(product)
@@ -103,7 +127,8 @@ export const productRelations = relations(product, ({ many, one }) => ({
 		fields: [product.categoryId],
 		references: [productCategory.id]
 	}),
-	orderDetails: many(orderDetail)
+	orderDetails: many(orderDetail),
+	reviews: many(productReview)
 }));
 
 export const orderRelations = relations(order, ({ many, one }) => ({
@@ -124,11 +149,6 @@ export const cartRelations = relations(cart, ({ many, one }) => ({
 export const cartItemRelations = relations(cartItem, ({ one }) => ({
 	cart: one(cart, { fields: [cartItem.cartId], references: [cart.id] }),
 	product: one(product, { fields: [cartItem.productId], references: [product.id] })
-}));
-
-export const reviewRelations = relations(review, ({ one }) => ({
-	product: one(product, { fields: [review.productId], references: [product.id] }),
-	user: one(user, { fields: [review.userId], references: [user.id] })
 }));
 
 export const productInteractionRelations = relations(productInteraction, ({ one }) => ({

@@ -41,15 +41,14 @@
             prodForm.prodPrice = product.price ?? 0;
             prodForm.prodImage = product.image ?? '';
             prodForm.prodQty = product.quantity ?? 0;
-            prodForm.prodCatId =
-                product.categoryId ?? (categories[0]?.id ?? 0);
+            prodForm.prodCatId = product?.categoryId ?? null;
         } else {
             prodForm.prodName = '';
             prodForm.prodDesc = '';
             prodForm.prodPrice = 0;
             prodForm.prodImage = '';
             prodForm.prodQty = 0;
-            prodForm.prodCatId = categories[0]?.id ?? 0;
+            prodForm.prodCatId = null;
         }
     });
 
@@ -181,7 +180,7 @@
             {#if isUpdateMode && product.image}
                 <div class="mb-3">
                     <p class="form-label mb-1">Current Image</p>
-                    <img src={`/uploads/${product.image}`} alt="Current product" class="img-thumbnail mb-2" style="max-width: 200px;"/>
+                    <img src={`/productImage/${product.image}`} alt="Current product" class="img-thumbnail mb-2" style="max-width: 200px;"/>
                     <div class="form-text">
                         Choose a new image only if you want to replace it
                     </div>
@@ -244,14 +243,14 @@
                 </label>
                 <select
                     class="form-select"
-                    class:is-invalid={errors.categoryId}
+                    // class:is-invalid={errors.categoryId}
                     id="productCatId"
                     name="prodCatId"
                     bind:value={prodForm.prodCatId}
-                    required
-                    aria-required="true"
-                    aria-describedby={errors.categoryId ? 'productCatId-error' : undefined}
-                    aria-invalid={errors.categoryId ? 'true' : 'false'}
+                //  required
+                //  aria-required="true"
+                //  aria-describedby={errors.categoryId ? 'productCatId-error' : undefined}
+                //  aria-invalid={errors.categoryId ? 'true' : 'false'}
                 >
                     {#each categories as cat}
                         <option value={cat.id}>{cat.name}</option>
