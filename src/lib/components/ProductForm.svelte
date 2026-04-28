@@ -180,7 +180,7 @@
             {#if isUpdateMode && product.image}
                 <div class="mb-3">
                     <p class="form-label mb-1">Current Image</p>
-                    <img src={`/uploads/${product.image}`} alt="Current product" class="img-thumbnail mb-2" style="max-width: 200px;"/>
+                    <img src={`/productImage/${product.image}`} alt="Current product" class="img-thumbnail mb-2" style="max-width: 200px;"/>
                     <div class="form-text">
                         Choose a new image only if you want to replace it
                     </div>

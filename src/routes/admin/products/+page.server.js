@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path';
 
 // Make sure uploads folder exists
-const uploadsDir = path.resolve('static/uploads');
+const uploadsDir = path.resolve('static/productImage');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
 export async function load({ locals }) {
@@ -44,13 +44,15 @@ export const actions = {
                 fs.writeFileSync(path.join(uploadsDir, filename), buffer);
             }
 
+            console.log('categoryId:', formData.get('prodCatId'));
+
             const productData = {
                 name: formData.get('prodName'),
                 description: formData.get('prodDesc'),
                 price: Number(formData.get('prodPrice')),
                 image: filename,
                 quantity: Number(formData.get('prodQty')),
-                categoryId: Number(formData.get('prodCatId'))
+                categoryId: formData.get('prodCatId') ? Number(formData.get('prodCatId')) : null
             };
 
             await productsService.createProduct(productData);
