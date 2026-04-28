@@ -9,7 +9,7 @@ import { cartService } from '$lib/server/services/cart-service';
 
 
 // Make sure uploads folder exists
-const uploadsDir = path.resolve('static/uploads');
+const uploadsDir = path.join(process.cwd(), 'static', 'productImage');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
 export async function load({ locals }) {

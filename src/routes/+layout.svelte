@@ -132,9 +132,6 @@
 				{/if}
       </div>
     </div>
-  </div>
-</header>
-{@render children()}
 <div class="container-xl bd-gutter my-md-4 bd-layout">
   {@render children()}
 </div>

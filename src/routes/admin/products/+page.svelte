@@ -118,7 +118,7 @@
                 <div transition:slide={{ duration: 400 }}>
                     <ProductForm
                         product={selectedProduct}
-                        // categories={data.categories}
+                        categories={data.categories}
                         onCancel={() => {
                             showForm = false;
                             selectedProduct = null;

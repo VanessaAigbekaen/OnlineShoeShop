@@ -23,8 +23,8 @@ function zodToFieldErrors(err) {
 export const actions = {
 	createUser: async ({ request, locals }) => {
 		try {
-			const formData = await request.formData();
-
+			const formData = await request.formData();	
+					
 			await adminUsersService.createUser(
 				locals.user,
 				{
@@ -73,14 +73,18 @@ export const actions = {
 
 	deleteUser: async ({ request, locals }) => {
 		try {
+			const formData = await request.formData();
+        	const id = Number(formData.get('id'));
+			
 			await adminUsersService.deleteUser(
 				locals.user,
-				Number((await request.formData()).get('id')),
+				id,
 				request.headers
 			);
 
 			return { success: true };
 		} catch (err) {
+			console.error('deleteUser error:', err)
 			return fail(500, { errors: { general: err.message } });
 		}
 	},

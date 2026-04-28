@@ -4,7 +4,11 @@ import { usersDataAccess } from '$lib/server/data-access/users-data-access.js';
 import { idSchema, adminInsertUserSchema, updateUserSchema } from '$lib/server/db/validation.js';
 import { z } from 'zod';
 import { eq } from 'drizzle-orm';
-import { user } from '../db/auth.schema';
+import { user, session, account } from '../db/auth.schema';
+import { cart, cartItem, order, orderDetail, review, productInteraction, productReview } from '../db/schema.js';
+import { validateAuthorizationCode } from 'better-auth';
+import { error } from '@sveltejs/kit'
+import { idSchema, adminInsertUserSchema, updateUserSchema } from '$lib/server/db/validation.js';
 
 /**
  * Local password schema for admin reset/create
@@ -45,13 +49,15 @@ export const adminUsersService = {
 	async createUser(currentUser, userData, headers) {
 		await requireAdmin(currentUser);
 
+	let validatedUser;
 		// 1️ Validate user fields
-		const validatedUser = adminInsertUserSchema.parse({
+		validatedUser = adminInsertUserSchema.parse({
 			name: userData.name,
 			email: userData.email,
 			dob: userData.dob || null,
 			role: userData.role || 'user'
 		});
+		
 
 		// 2️ Validate password
 		const validatedPassword = adminPasswordSchema.parse({
@@ -69,9 +75,20 @@ export const adminUsersService = {
 			headers
 		});
 
+
+
 		// 4️ Update extra app fields (dob)
 		if (validatedUser.dob) {
-			const created = await usersDataAccess.findByEmail(validatedUser.email);
+
+			// Convert user email to lower to add to database
+			let created = null;
+			const emailLower = validatedUser.email.toLowerCase();
+
+			for (let i = 0; i < 10; i ++){
+				created = await usersDataAccess.findByEmail(emailLower);
+				if (created) break;
+				await new Promise(resolve => setTimeout(resolve, 500));
+			}
 
 			if (!created) {
 				throw new Error('User created but not found in DB');
@@ -139,8 +156,28 @@ export const adminUsersService = {
 		await requireAdmin(currentUser);
 
 		const validated = idSchema.parse({ id });
+		const userId = validated.id;
 
-		await db.delete(user).where(eq(user.id, validated.id));
+
+    	// Empty/delete users cart
+    	const userCarts = await db.select().from(cart).where(eq(cart.userId, userId));
+    	for (const c of userCarts) {
+     		await db.delete(cartItem).where(eq(cartItem.cartId, c.id));
+  	 	}
+
+    	// Get users previous orders and delete them
+    	const userOrders = await db.select().from(order).where(eq(order.userId, userId));
+    	for (const o of userOrders) {
+    	    await db.delete(orderDetail).where(eq(orderDetail.orderId, o.id));
+    	}
+
+    	await db.delete(cart).where(eq(cart.userId, userId));
+   		await db.delete(order).where(eq(order.userId, userId));
+    	await db.delete(productReview).where(eq(productReview.userId, userId));
+    	await db.delete(productInteraction).where(eq(productInteraction.userId, userId));
+    	await db.delete(session).where(eq(session.userId, userId));
+    	await db.delete(account).where(eq(account.userId, userId));
+    	await db.delete(user).where(eq(user.id, userId));
 
 		return true;
 	},
@@ -157,9 +194,13 @@ export const adminUsersService = {
 			password: payload.password
 		});
 
-		await usersDataAccess.update(validatedId.id, {
-			password: validatedPassword.password
-		});
+		await auth.api.setUserPassword({
+			body: {
+				userId: String(validatedId.id),
+				newPassword: validatedPassword.password
+			},
+			headers
+		})
 
 		return true;
 	}
