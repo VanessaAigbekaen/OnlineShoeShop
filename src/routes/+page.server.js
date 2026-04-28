@@ -15,7 +15,6 @@ export async function load() {
   return {
     products
   };
-<<<<<<< HEAD
 }
 
 export const actions = {
@@ -37,8 +36,3 @@ export const actions = {
     return { success: true };
   }
 };
-=======
-
-  
-}
->>>>>>> leon

@@ -22,8 +22,15 @@ export const usersService = {
 		return await usersDataAccess.update(validatedId.id, validatedProfile);
 	},
 
-	async updateProfileByEmail(email, profileData) {
-		const existingUser = await usersDataAccess.findByEmail(email);
+	async updateProfileByEmail(email, profileData, retries = 5, delayMs = 300) {
+		let existingUser = null;
+
+		// added retry loop
+		for(let i = 0; i < retries; i++){
+			existingUser = await usersDataAccess.findByEmail(email);
+			if(existingUser) break;
+			await new Promise(resolve => setTimeout(resolve, delayMs))
+		}
 
 		if (!existingUser) {
 			throw new Error('User not found');

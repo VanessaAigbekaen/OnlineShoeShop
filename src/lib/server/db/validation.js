@@ -94,3 +94,14 @@ export const updateOrderDetailSchema = insertOrderDetailSchema.partial();
 export const deleteOrderDetailSchema = z.object({
     id: z.number().int().positive()
 });
+
+// =========================
+// Admin Schemas
+// =========================
+
+export const adminInsertUserSchema = z.object({
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    email: z.string().email('Must be a valid email'),
+    dob: z.string().nullable().optional(),
+    role: z.string().optional()
+});

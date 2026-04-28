@@ -23,8 +23,8 @@ function zodToFieldErrors(err) {
 export const actions = {
 	createUser: async ({ request, locals }) => {
 		try {
-			const formData = await request.formData();
-
+			const formData = await request.formData();	
+					
 			await adminUsersService.createUser(
 				locals.user,
 				{
