@@ -1,13 +1,13 @@
 <script>
 
-    import { ROLES } from "$lib/constants/roles";
+  import { ROLES } from "$lib/constants/roles";
 	import favicon from '$lib/assets/favicon.svg';
 	import { onMount } from 'svelte';
 	// Browser used to test if client or server side
 	import { browser } from '$app/environment';
 	import 'bootstrap/dist/css/bootstrap.min.css'
 	import 'bootstrap-icons/font/bootstrap-icons.min.css';
-    import { cartCount } from '$lib/stores/cartStore';
+  import { cartCount } from '$lib/stores/cartStore';
   import { search } from "$lib/stores/search";
   import { category } from "$lib/stores/categories";
   import { cart } from '$lib/stores/cartStore';
@@ -20,7 +20,7 @@
 		}
 	})
 
-	let { children, data } = $props();
+	let { data } = $props();
 </script>
 
 <svelte:head>
@@ -57,9 +57,7 @@
         <li class="nav-item">
           <a class="nav-link" href="/admin">Home</a>
         </li>
-    <li class="nav-item dropdown">
-    
-    </li>
+
     <!-- Admin only links -->
 				{#if data?.user?.role === 'admin'}
 					<li class="nav-item">
@@ -72,18 +70,17 @@
 							<i class="bi bi-bag me-1"></i>Manage Orders
 						</a>
 					</li>
-                    <li class="nav-item">
+          <li class="nav-item">
 						<a class="nav-link" href="/admin/products">
-							<i class="bi bi-bag me-1"></i>Manage Products
+						  <i class="bi bi-bag me-1"></i>Manage Products
 						</a>
 					</li>
-                    <li class="nav-item">
+          <li class="nav-item">
 						<a class="nav-link" href="/admin/users">
 							<i class="bi bi-bag me-1"></i>Manage users
 						</a>
 					</li>
-    
-				{/if}
+        {/if}
       </ul>
 
       <!-- Search Bar -->

@@ -69,6 +69,16 @@
                             <i class="bi bi-bag me-1"></i>Manage Orders
                         </a>
                     </li>
+                    <li class="nav-item">
+						<a class="nav-link" href="/admin/products">
+						  <i class="bi bi-shop me-1"></i>Manage Products
+						</a>
+					</li>
+                     <li class="nav-item">
+						<a class="nav-link" href="/admin/users">
+							<i class="bi bi-people me-1"></i>Manage users
+						</a>
+					</li>
                 {/if}
             </ul>
 
@@ -95,6 +105,14 @@
                         </span>
                     </a>
                 {/if}
+
+                <!-- Wishlist -->
+                <a href="/wishlist" class="text-white position-relative">
+                    <i class="bi bi-heart fs-5"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {data.wishlistCount ?? 0}
+                    </span>
+                </a>
 
                 {#if data?.user}
                     <div class="dropdown">
