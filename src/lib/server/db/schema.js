@@ -156,4 +156,20 @@ export const productInteractionRelations = relations(productInteraction, ({ one 
 	product: one(product, { fields: [productInteraction.productId], references: [product.id] })
 }));
 
+/**========================
+ * Wishlist Table
+ * =======================*/
+
+export const wishlistItem = sqliteTable('wishlist_item', {
+  id: integer().primaryKey({ autoIncrement: true }),
+  userId: integer().notNull().references(() => user.id),
+  productId: integer().notNull().references(() => product.id)  // ← lowercase .id
+});
+
+export const wishlistItemRelations = relations(wishlistItem, ({ one }) => ({
+	user: one(user, { fields: [wishlistItem.userId], references: [user.id] }),
+	product: one(product, { fields: [wishlistItem.productId], references: [product.id] })
+}));
+
+
 export * from './auth.schema';

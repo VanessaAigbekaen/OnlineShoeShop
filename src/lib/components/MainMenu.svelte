@@ -102,6 +102,14 @@
           </span>
         </a>
 
+         <!-- Wishlist -->
+        <a href="/wishlist" class="text-white position-relative">
+          <i class="bi bi-heart fs-5"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {data.wishlistCount ?? 0}
+          </span>
+        </a>
+
         <!-- User menu-->
         {#if data?.user}
 					<div class="dropdown">

@@ -1,11 +1,13 @@
 import { usersService } from '$lib/server/services/users-service.js';
 import { cartService } from '$lib/server/services/cart-service';
+import { wishlistService } from '$lib/server/services/wishlist-service.js';
 
 export async function load({ locals }) {
   if (!locals.user) {
     return {
       user: null,
-      cartCount: 0
+      cartCount: 0,
+      wishlistCount: 0
     };
   }
 
@@ -16,8 +18,14 @@ export async function load({ locals }) {
   const cart = await cartService.getOrCreateCart(locals.user.id);
   const items = await cartService.getItems(cart.id);
 
+  // Wishlist items
+  const wishlistItems = await wishlistService.getItems(locals.user.id);
+
+
   return {
     user: fullUser,
-    cartCount: items.length
+    cartCount: items.length,
+    wishlistCount: wishlistItems.length
   };
+  
 }

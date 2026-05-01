@@ -5,6 +5,7 @@
     import { search } from "$lib/stores/search";
     import { category } from "$lib/stores/categories";
     import { invalidateAll } from '$app/navigation';
+    import { page } from '$app/stores'
     export let data;
 
     // ── Cart ─
@@ -14,6 +15,9 @@
 
     // ── Category sidebar filter 
     let selectedCatId = null;
+
+    // filter items by category
+    $: selectedCatId = Number($page.url.searchParams.get('categoryId')) || null;
 
     function filterByCat(catId) {
         selectedCatId = catId === null ? null : Number(catId);
@@ -150,6 +154,14 @@
                                         Add To Cart
                                     </button>
                                 </form>
+                                {#if data.user}
+                                    <form method="post" action="/wishlist?/addItem" use:enhance>
+                                        <input type="hidden" name="productId" value={product.id} />
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary w-100 mt-1">
+                                        <i class="bi bi-heart me-1"></i> Add to Wishlist
+                                        </button>
+                                    </form>
+                                {/if}
                                 <!-- Edit / Delete -->
                                 {#if data.user?.role === 'admin'}
                                     <div class="mt-2 d-flex gap-1 justify-content-center">
