@@ -55,16 +55,34 @@
                                     <i class="bi bi-grid me-1"></i> Similar products</a>
                                 </div>
 
-                                <!-- Remove -->
-                                <div class="col-6 col-md-2 mt-3 mt-md-0 text-end">
+                                <div class="col-12 mt-2">
+                                    <div class="d-flex gap-2 align-items-center">
+
+                                    <!-- Delete -->
                                     <form method="post" action="?/removeItem" use:enhance>
                                         <input type="hidden" name="productId" value={item.productId} />
-                                        <button class="btn btn-sm btn-outline-danger" type="submit">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
 
+                                    <!-- Note -->
+                                    <form method="post" action="?/updateNote" class="flex-grow-1"
+                                        use:enhance={() => {
+                                            return ({ update }) => update({ reset: false });
+                                        }}
+                                    >
+                                        <input type="hidden" name="productId" value={item.productId} />
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control" name="note" placeholder="Add a note!" value={item.note ?? ''} />
+                                                <button class="btn btn-sm btn-outline-secondary" type="submit">
+                                                    <i class="bi bi-save me-1"></i>Save Note
+                                                </button>
+                                            </div>
+                                        </form>
+
+                                </div>
+                                </div>
                             </div>
                         </div>
                     </div>

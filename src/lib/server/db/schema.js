@@ -163,7 +163,8 @@ export const productInteractionRelations = relations(productInteraction, ({ one 
 export const wishlistItem = sqliteTable('wishlist_item', {
   id: integer().primaryKey({ autoIncrement: true }),
   userId: integer().notNull().references(() => user.id),
-  productId: integer().notNull().references(() => product.id)  // ← lowercase .id
+  productId: integer().notNull().references(() => product.id),
+  note: text().default('')
 });
 
 export const wishlistItemRelations = relations(wishlistItem, ({ one }) => ({

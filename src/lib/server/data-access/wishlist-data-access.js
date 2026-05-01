@@ -11,12 +11,21 @@ export const wishlistDataAccess = {
             image: product.image,
             name: product.name,
             unitPrice: product.price,
-            categoryId: product.categoryId
+            categoryId: product.categoryId,
+            note: wishlistItem.note
       })
         .from(wishlistItem)
         .innerJoin(product, eq(wishlistItem.productId, product.id))
         .where(eq(wishlistItem.userId, userId));
   },
+
+
+    async updateNote(userId, productId, note){
+        await db
+            .update(wishlistItem)
+            .set({ note })
+            .where(and(eq(wishlistItem.userId, userId), eq(wishlistItem.productId, productId)));
+    },
 
     async addItem(userId, productId) {
         const existing = await db

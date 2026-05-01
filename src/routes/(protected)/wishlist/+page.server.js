@@ -43,5 +43,14 @@ export const actions = {
 
         const cart = await cartService.getOrCreateCart(locals.user.id);
         await cartService.addItem(cart.id, productId, 1);
+    },
+
+    updateNote: async ({ request, locals}) => {
+        const formData = await request.formData();
+        const productId = Number(formData.get('productId'));
+        const note = formData.get('note');
+        
+        await wishlistService.updateNote(locals.user.id, productId, note);
+        return { success: true};
     }
 };
