@@ -61,7 +61,3 @@ body{
 .product-image img:hover{
     transform: rotate(7deg);
 }
-
-footer {
-  margin-bottom: 0;
-}

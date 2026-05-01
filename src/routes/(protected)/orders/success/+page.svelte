@@ -13,4 +13,4 @@
 <p><strong>Total:</strong> {euro.format(data.order.total)}</p>
 <p><strong>Date:</strong> {new Date(data.order.createdAt).toLocaleString()}</p>
 
-<a href={`/orders/${data.order.id}/confirmation`} class="btn btn-primary">View all orders</a>
+<a href={`/orders/${order.id}/confirmation`} class="btn btn-primary">View all orders</a>
