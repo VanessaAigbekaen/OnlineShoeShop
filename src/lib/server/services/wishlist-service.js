@@ -17,4 +17,8 @@ export const wishlistService = {
   async removeItem(userId, productId) {
       return wishlistDataAccess.removeItem(userId, productId);
     },
+
+  async updateNote(userId, productId, note){
+    return wishlistDataAccess.updateNote(userId, productId, note);
+  }
 }
