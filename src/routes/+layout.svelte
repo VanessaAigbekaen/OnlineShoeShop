@@ -159,3 +159,45 @@
 <div class="container-xl my-4">
     {@render children()}
 </div>
+
+<footer class="bg-dark text-light mt-5 pt-3 pb-2">
+  <div class="container">
+
+    <div class="row">
+
+      <!-- Brand -->
+      <div class="col-md-4 mb-3">
+        <h5 class="fw-bold">Leon's Shoe Shop</h5>
+        <p class="small text-muted">
+          Quality footwear for every occasion. Built as a modern e-commerce web application.
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-semibold">Quick Links</h6>
+        <ul class="list-unstyled small">
+          <li><a href="/" class="text-decoration-none text-light">Home</a></li>
+          <li><a href="/products" class="text-decoration-none text-light">Shop</a></li>
+          <li><a href="/about" class="text-decoration-none text-light">About</a></li>
+          <li><a href="/policy" class="text-decoration-none text-light">Policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-semibold">Contact</h6>
+        <p class="small mb-1">📧 support@leonshoes.com</p>
+        <p class="small mb-0">📍 Dublin, Ireland</p>
+      </div>
+
+    </div>
+
+    <hr class="border-secondary" />
+
+    <div class="text-center small text-muted">
+      © {new Date().getFullYear()} Leon's Shoe Shop — Built with SvelteKit
+    </div>
+
+  </div>
+</footer>
