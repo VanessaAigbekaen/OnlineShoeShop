@@ -1,8 +1,8 @@
+console.log("🔥 WEBHOOK RECEIVED");
 import { stripe } from '$lib/server/stripe.js';
 import { json } from '@sveltejs/kit';
 import { ordersService } from '$lib/server/services/orders-service.js';
 import { STRIPE_WEBHOOK_SECRET } from '$env/static/private';
-import { usersService } from '$lib/server/services/users-service.js';
 
 export const POST = async ({ request }) => {
   // 1️ Get Stripe signature header
@@ -10,7 +10,7 @@ export const POST = async ({ request }) => {
 
   // 2️ Read raw body (required for Stripe verification)
   const rawBody = await request.text();
-
+  console.log("🔥 WEBHOOK RECEIVED");
   let event;
 
   try {
@@ -20,6 +20,8 @@ export const POST = async ({ request }) => {
       sig,
       STRIPE_WEBHOOK_SECRET
     );
+
+    console.log("EVENT TYPE:", event.type);
   } catch (err) {
     console.error('Webhook signature verification failed:', err.message);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });
@@ -28,23 +30,19 @@ export const POST = async ({ request }) => {
   // 4️ Handle relevant Stripe events
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-
     const userId = Number(session.metadata?.userId);
+    console.log("CREATING ORDER FOR USER:", userId);
+     if (!userId) {
+      console.warn('No userId in metadata');
+      return json({ received: true });
+    }
 
-    if (!userId) {
-      console.warn('checkout.session.completed without userId metadata');
-    } else {
-      try {
-        const user = await usersService.getById(userId);
-        await ordersService.createOrderFromCart({ id: userId });
-
-        console.log(`Order created for user ${userId}`);
-      } catch (err) {
-        console.error(`Failed to create order for user ${userId}:`, err);
-      }
+    try {
+      const order = await ordersService.createOrderFromCart({ id: userId });
+      console.log(" Order created:", order.id);
+    } catch (err) {
+      console.error(" Webhook error:", err);
     }
   }
-
-  // 6️ Acknowledge receipt to Stripe
   return json({ received: true });
 };

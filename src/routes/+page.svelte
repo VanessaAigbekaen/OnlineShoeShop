@@ -46,7 +46,7 @@
             <div class="product-info">
                 <h4 class="product-title">{product.name}</h4>
                 <p class="product-desc">{product.description}</p>
-                <h5 class="product-price">${product.price}</h5>
+                <h5 class="product-price">€{product.price}</h5>
                 <form method="post" action="?/addToCart"  use:enhance={() => {return async () => { await invalidateAll();}; }}>
                     <input type="hidden" name="productId" value={product.id} />
                     {#if data.user?.role !== 'admin'}

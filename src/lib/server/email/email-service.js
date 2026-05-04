@@ -6,7 +6,7 @@ const resend = new Resend(RESEND_API_KEY);
 export async function sendOrderConfirmationEmail({ to, orderId, total }) {
   await resend.emails.send({
     from: 'WebDev Shop <onboarding@resend.dev>',
-    to,
+    to: 'aigbekaenvanessa54@gmail.com',
     subject: `Order Confirmation #${orderId}`,
     html: `
       <h2>Thank you for your order</h2>
@@ -16,3 +16,4 @@ export async function sendOrderConfirmationEmail({ to, orderId, total }) {
   });
 console.log("Order confirmation email sent to", to);
 }
+

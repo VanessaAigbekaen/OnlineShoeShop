@@ -29,14 +29,20 @@ export async function load({ url, locals }) {
   }
 
   /// 5️ Get latest order for this user (created by webhook)
-  const orders = await ordersService.getOrdersByUserId(userId);
+  let order = null;
+  for (let i = 0; i < 10; i++) {
+    const orders = await ordersService.getOrdersByUserId(userId);
 
-  if (!orders.length) {
-    throw error(404, 'No orders found');
+    if (orders.length > 0) {
+      order = orders[orders.length - 1];
+      break;
+    }
+    await new Promise(res => setTimeout(res, 700));
   }
 
-  // Get most recent order
-  const order = orders[orders.length - 1];
+  if (!order) {
+    throw error(404, 'Order not found after payment');
+  }
 
   // 7️ Security check
   if (order.userId !== userId) {

@@ -44,7 +44,13 @@
 
                                 <!-- Update Quantity -->
                                 <div class="col-md-3 mt-3 mt-md-0">
-                                    <form method="post" action="?/updateQuantity" use:enhance>
+                                    <form method="post" action="?/updateQuantity" use:enhance ={() => 
+                                        {return async ({ update }) => {
+                                            await update(); 
+                                            await invalidateAll();
+                                            };
+                                        }}
+                                    >
                                         <input type="hidden" name="cartItemId" value={item.id} />
                                         <div class="input-group input-group-sm">
                                             <input
@@ -90,7 +96,7 @@
                         <h5 class="card-title mb-4">Order Summary</h5>
 
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Items ({data.items.length})</span>
+                            <span class="text-muted">Items ({data.items.reduce((sum, i) => sum + i.quantity, 0)})</span>
                             <span>€{data.total.toFixed(2)}</span>
                         </div>
 

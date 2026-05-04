@@ -59,17 +59,13 @@ export const actions = {
         const items = await cartService.getItems(cart.id);
 
         if (!items.length) throw error(400, 'Cart is empty');
-
-        // 2️ Create order BEFORE Stripe
-        const order = await ordersService.createOrderFromCart(locals.user);
-        
         // 3️ Create Stripe Checkout session
         const session = await stripe.checkout.sessions.create({
         mode: 'payment',                     // one-time payment
         payment_method_types: ['card'],      // allow card payments
         customer_email: locals.user.email,   // optional, prefill Stripe checkout
         metadata: {
-            orderId: order.id.toString()    // <-- link Stripe session to order
+            userId: locals.user.id.toString()    // <-- link Stripe session to order
         },
         line_items: items.map(item => ({
             price_data: {

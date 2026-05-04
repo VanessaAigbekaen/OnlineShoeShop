@@ -24,7 +24,7 @@ export async function load({ locals }) {
 
   return {
     user: fullUser,
-    cartCount: items.length,
+    cartCount: items.reduce((sum, item) => sum + item.quantity, 0),
     wishlistCount: wishlistItems.length
   };
   
