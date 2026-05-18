@@ -1,42 +1,7 @@
-# sv
+# Leon’s Shoe Shop – E-Commerce Web Application
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Leon’s Shoe Shop is a full-stack e-commerce web application designed to provide users with a smooth and user-friendly online shopping experience for men’s footwear. The system allows customers to browse products, search and filter shoes by category, register and log into accounts, manage their cart, and complete purchases through an integrated payment gateway.
 
-## Creating a project
+The application also includes an admin panel with CRUD functionality, allowing administrators to manage products, categories, users, and orders dynamically through the system. Additional features such as wishlist functionality, product reviews, email notifications, and order confirmations were implemented to improve user interaction and overall customer experience.
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```sh
-# create a new project
-npx sv create my-app
-```
-
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-npx sv@0.12.5 create --template minimal --no-types --add prettier eslint vitest="usages:unit,component" playwright --install npm .
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+The project was developed using an AGILE methodology and focused on creating a scalable and structured system by integrating frontend, backend, database management, authentication, and payment processing into one complete e-commerce platform.
